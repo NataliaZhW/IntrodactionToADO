@@ -93,8 +93,11 @@ namespace IntrodactionToADO
 
             //SqlConnection connection = new SqlConnection(connectionString);
 
+            //string aut = "Scott";
 
-            cmd = "SELECT COUNT(*) FROM Books";
+            cmd = "SELECT COUNT(*) FROM Books,Authors WHERE author = author_id AND first_name = 'Jeffrey'";//(NCHAR (150)
+            //cmd = "SELECT COUNT(*) FROM Books,Authors WHERE author = author_id AND first_name = 'Scott'";//(NCHAR (150)
+
             //cmd = "SELECT COUNT(*) FROM Authors";
             Console.WriteLine(cmd);
             command = new SqlCommand(cmd, connection);
