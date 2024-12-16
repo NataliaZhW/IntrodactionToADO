@@ -29,7 +29,7 @@ namespace IntrodactionToADO
 
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                Console.Write(reader.GetName(i).ToString().PadRight(padding-1));
+                Console.Write(reader.GetName(i).ToString().PadRight(padding - 1));
             }
             Console.WriteLine();
 
@@ -39,15 +39,41 @@ namespace IntrodactionToADO
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        Console.Write(reader[i].ToString().PadRight(padding).Remove(padding-1));  //   // + "\t\t"                   
+                        Console.Write(reader[i].ToString().PadRight(padding).Remove(padding - 1));  //   // + "\t\t"                   
                         //Console.Write(reader[i] + "\t\t");     // .ToString().PadRight(padding)                  
+                    }
+                    Console.WriteLine();
+                }
+            }
+
+            reader.Close();
+            connection.Close();
+            Console.WriteLine("\n===========================\n");
+            Console.WriteLine("\n===========================\n");
+            command.CommandText = "SELECT book_title, first_name+' '+ last_name AS 'Author' FROM Books JOIN Authors ON (author = author_id)";
+
+            connection.Open();
+            reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    Console.Write(reader.GetName(i).ToString().PadRight(padding - 1));
+                    //Console.WriteLine("\n===========================2\n");
+                }
+                Console.WriteLine();
+                while (reader.Read())
+                {
+                    for (int j = 0; j < reader.FieldCount; j++)
+                    {
+                        Console.Write(reader[j].ToString().PadRight(padding).Remove(padding - 1));  //   // + "\t\t"                   
+
                     }
                     Console.WriteLine();
                 }
             }
             reader.Close();
             connection.Close();
-
 
             //string connectionString = "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = Library; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
             //Console.WriteLine(connectionString);
@@ -56,19 +82,19 @@ namespace IntrodactionToADO
             //SqlConnection connection = new SqlConnection(connectionString);
 
 
-            
+
             cmd = "SELECT * FROM Books";
             Console.WriteLine(cmd);
             command = new SqlCommand(cmd, connection);
 
             connection.Open();
             //const int padding = 25;
-            
+
             reader = command.ExecuteReader();
 
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                Console.Write(reader.GetName(i).ToString().PadRight(padding-1));
+                Console.Write(reader.GetName(i).ToString().PadRight(padding - 1));
             }
             Console.WriteLine();
 
@@ -86,7 +112,7 @@ namespace IntrodactionToADO
             reader.Close();
             connection.Close();
 
-            
+
             //string connectionString = "Data Source = (localdb)\\MSSQLLocalDB; Initial Catalog = Library; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False";
             //Console.WriteLine(connectionString);
             Console.WriteLine("\n---------------------------");
@@ -104,10 +130,49 @@ namespace IntrodactionToADO
 
             connection.Open();
             Int32 count = (Int32)command.ExecuteScalar();
-            Console.WriteLine("Count: "+count);
+            Console.WriteLine("Count: " + count);
 
             reader.Close();
             connection.Close();
+
+
+
+
+
+
+            command.CommandText =
+                "SELECT " +
+                "first_name+' '+ last_name AS 'Author'," +
+                "COUNT(book_id) AS 'Books count'" +
+                " FROM Books JOIN Authors ON (author = author_id)"
+                + "GROUP BY first_name,last_name"
+                ;
+            Console.WriteLine("\n===========================3\n");
+
+            //"WHERE author = author_id AND first_name = 'Jeffrey'";//(NCHAR (150)  //"SELECT book_title, first_name+' '+ last_name AS 'Author' FROM Books JOIN Authors ON (author = author_id)";
+            connection.Open();
+            reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    Console.Write(reader.GetName(i).ToString().PadRight(padding - 1));
+                    //Console.WriteLine("\n===========================\n");
+                    Console.WriteLine();
+                    while (reader.Read())
+                    {
+                        for (int j = 0; j < reader.FieldCount; j++)
+                        {
+                            Console.Write(reader[j].ToString().PadRight(padding).Remove(padding - 1));  //   // + "\t\t"                   
+
+                        }
+                        Console.WriteLine();
+                    }
+                }
+            }
+            reader.Close();
+            connection.Close();
+
         }
     }
 }
