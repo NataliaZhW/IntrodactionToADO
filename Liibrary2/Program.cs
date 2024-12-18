@@ -15,7 +15,7 @@ namespace Liibrary2
         static void Main(string[] args)
         {
             //Console.WriteLine(Library.connectionString);
-            //Library.Insert("Authors", "author_id,last_name,first_name" ,"10, 'Mazin','Alexsandr'");//
+            Library.InsertParam("Authors", "author_id,last_name,first_name" ,"12, 'Smit1','Alex'");//
             Library.Select("Authors", "author_id,last_name,first_name" );//,"10, 'Mazin','Alexsandr'"
             //Library.Insert("Books", "book_id,book_title,book_size,publish_year,author", "6,'Vicings',950,'10.10.2010',10");
             Library.Select("Books", "book_id,book_title,book_size,publish_year,author");

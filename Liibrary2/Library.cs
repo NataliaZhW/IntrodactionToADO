@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Xml.Linq;
 
 namespace Liibrary2
 {
@@ -21,7 +22,7 @@ namespace Liibrary2
             connection = new SqlConnection(connectionString);
             Console.WriteLine(connectionString);
         }
-        public static void Select(string tables,string fields,  string condition = "", int padding = 20)
+        public static void Select(string tables, string fields, string condition = "", int padding = 20)
         {
             Console.WriteLine("\n===========================2");
             string cmd = $"SELECT {fields} FROM {tables} ";
@@ -63,6 +64,45 @@ namespace Liibrary2
             command.ExecuteNonQuery();
             Console.WriteLine("===========================2\n");
 
+            connection.Close();
+        }
+
+
+        public static void InsertParam(string table, string fields, string values)//, string passvord
+        {
+            Console.WriteLine("\n===========================2");
+            string cmd = $"INSERT @table(@fields) VALUES (@values);";
+            //SqlCommand command = new SqlCommand(cmd, connection);
+            //connection.Open();
+            //command.ExecuteNonQuery();
+            Console.WriteLine("===========================2\n");
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //await connection.OpenAsync();
+
+                SqlCommand command = new SqlCommand();
+                // определяем выполняемую команду
+                command.CommandText = cmd;
+                // определяем используемое подключение
+                command.Connection = connection;
+                // создаем параметр 
+                SqlParameter nameParam = new SqlParameter("@table", table);
+                // добавляем параметр к команде
+                command.Parameters.Add(nameParam);
+                // создаем параметр 
+                SqlParameter ageParam = new SqlParameter("@fields", fields);
+                // добавляем параметр к команде
+                command.Parameters.Add(ageParam);
+                 // создаем параметр 
+                SqlParameter valuesParam = new SqlParameter("@values", values);
+                // добавляем параметр к команде
+                command.Parameters.Add(valuesParam);
+
+                //int number = 
+                    command.ExecuteNonQueryAsync();
+                //Console.WriteLine($"Добавлено объектов: {number}");
+            }
             connection.Close();
         }
     }
