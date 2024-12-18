@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntrodactionToADO", "IntrodactionToADO\IntrodactionToADO.csproj", "{00427359-1DFE-4DA4-B08A-225C6C066A5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Liibrary2", "Liibrary2\Liibrary2.csproj", "{F833E0C8-0913-41C3-BF3A-B2B2CDAE244F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{00427359-1DFE-4DA4-B08A-225C6C066A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00427359-1DFE-4DA4-B08A-225C6C066A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00427359-1DFE-4DA4-B08A-225C6C066A5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F833E0C8-0913-41C3-BF3A-B2B2CDAE244F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F833E0C8-0913-41C3-BF3A-B2B2CDAE244F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F833E0C8-0913-41C3-BF3A-B2B2CDAE244F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F833E0C8-0913-41C3-BF3A-B2B2CDAE244F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
