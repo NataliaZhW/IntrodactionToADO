@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.dataGridViewGroups = new System.Windows.Forms.TabControl();
             this.tabPageStudents = new System.Windows.Forms.TabPage();
             this.tabPageGroups = new System.Windows.Forms.TabPage();
             this.statusStripGroups = new System.Windows.Forms.StatusStrip();
@@ -36,7 +36,7 @@
             this.tslStudentsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslGroupsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataGridViewStudents = new System.Windows.Forms.DataGridView();
-            this.tabControl.SuspendLayout();
+            this.dataGridViewGroups.SuspendLayout();
             this.tabPageStudents.SuspendLayout();
             this.tabPageGroups.SuspendLayout();
             this.statusStripGroups.SuspendLayout();
@@ -44,16 +44,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStudents)).BeginInit();
             this.SuspendLayout();
             // 
-            // tabControl
+            // dataGridViewGroups
             // 
-            this.tabControl.Controls.Add(this.tabPageStudents);
-            this.tabControl.Controls.Add(this.tabPageGroups);
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(748, 353);
-            this.tabControl.TabIndex = 0;
+            this.dataGridViewGroups.Controls.Add(this.tabPageStudents);
+            this.dataGridViewGroups.Controls.Add(this.tabPageGroups);
+            this.dataGridViewGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewGroups.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewGroups.Name = "dataGridViewGroups";
+            this.dataGridViewGroups.SelectedIndex = 0;
+            this.dataGridViewGroups.Size = new System.Drawing.Size(748, 353);
+            this.dataGridViewGroups.TabIndex = 0;
             // 
             // tabPageStudents
             // 
@@ -126,10 +126,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(748, 353);
-            this.Controls.Add(this.tabControl);
+            this.Controls.Add(this.dataGridViewGroups);
             this.Name = "MainForm";
             this.Text = "Academy";
-            this.tabControl.ResumeLayout(false);
+            this.dataGridViewGroups.ResumeLayout(false);
             this.tabPageStudents.ResumeLayout(false);
             this.tabPageStudents.PerformLayout();
             this.tabPageGroups.ResumeLayout(false);
@@ -145,7 +145,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabControl dataGridViewGroups;
         private System.Windows.Forms.TabPage tabPageStudents;
         private System.Windows.Forms.TabPage tabPageGroups;
         private System.Windows.Forms.StatusStrip statusStripStudenrs;
