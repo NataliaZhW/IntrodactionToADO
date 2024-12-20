@@ -75,7 +75,8 @@ namespace Academy
                     }
                     table.Rows.Add(row);
                 }
-                //dataGridViewGroups.DataSource = table;
+                dataGridViewGroups1.DataSource = table;
+                //dataGridViewStudents.DataSource = table;
             }            
             reader.Close();
             connection.Close();
