@@ -17,8 +17,10 @@ namespace Academy
     {
         string connectionString;
         SqlConnection connection;
-        Dictionary<string, int> d_groups_directions;/// parameters;
-        Dictionary<string, int> d_students_groups;/// parameters;
+        Dictionary<string, int> d_directions;
+        Dictionary<string, int> d_groups;
+
+        Dictionary<string, int> d_students_groups;
         Dictionary<string, int> d_students_directions;
         public MainForm()
         {
@@ -30,10 +32,16 @@ namespace Academy
             LoadStudents();
             //LoadGroups();
             LoadGroup();
-            LoadDirections();
-            LoadStudentsGroup();
-            LoadStudentsDirection();
+            d_groups = Connector.LoadPair("group_name", "group_id", "Groups");
+            d_directions = Connector.LoadPair("direction_name", "direction_id", "Directions");
+           
+            //LoadDirections();
+            //LoadStudentsGroup();
+            //LoadStudentsDirection();
             LoadTeachers();
+            LoadDictionaryToComboBox(d_directions, cbStudentsDirection);
+            LoadDictionaryToComboBox(d_directions, cbGroupsDirection);
+            LoadDictionaryToComboBox(d_groups, cbStudentsGroup);
         }
         void LoadStudents()
         {
@@ -50,18 +58,13 @@ namespace Academy
             //    while (reader.Read())
             //    {
             //        DataRow row = table.NewRow();
-            //        for (int i = 0; i < reader.FieldCount; i++)
-            //        {
-            //            row[i] = reader[i];
-            //        }
+            //        for (int i = 0; i < reader.FieldCount; i++) row[i] = reader[i]; 
             //        table.Rows.Add(row);
             //    }
             //    dataGridViewStudents.DataSource = table;
             //}
             //reader.Close();
             //connection.Close();
-
-
 
             dgvStudents.DataSource = Connector.LoadData
                (
@@ -112,11 +115,23 @@ namespace Academy
                 (
                     "group_id AS 'ID', " +
                     "group_name AS 'Название группы', " +
-                    //"(SELECT COUNT(student_id) FROM Groups,Students WHERE Students.[group] = Groups.group_id)  AS 'Количество студентов'," +
                     "direction_name AS 'Направление обучения'," +
-                    "(SELECT COUNT (student_id) FROM Groups,Students WHERE Students.[group] = Groups.group_id) AS 'Количество студентов'",
-                    "Groups,Directions",//,Students
-                    "direction = direction_id "//AND [group] = group_id
+                    //"(SELECT COUNT(student_id) FROM Groups,Students WHERE Students.[group] = Groups.group_id)  AS 'Количество студентов'," +
+                    //"(SELECT COUNT (student_id) FROM Groups,Students WHERE Students.[group] = Groups.group_id) AS 'Количество студентов'",
+                    "ISNULL(COUNT (student_id), 0) AS 'Количество студентов'",
+                    "Groups, Directions,Students ",//LEFT OUTER JOIN ON 
+                    "direction = direction_id AND [group] = group_id" +//
+                    " GROUP BY group_id,group_name,direction_name"
+
+
+                // "group_id AS 'ID', " +
+                //"group_name AS 'Название группы', " +
+                //"direction_name AS 'Направление обучения'," +
+                ////"(SELECT COUNT(student_id) FROM Groups,Students WHERE Students.[group] = Groups.group_id)  AS 'Количество студентов'," +
+                ////"(SELECT COUNT (student_id) FROM Groups,Students WHERE Students.[group] = Groups.group_id) AS 'Количество студентов'",
+                //"ISNULL(COUNT (student_id), 0) AS 'Количество студентов'",
+                //"Students RIGHT JOIN Groups ON [group] = group_id RIGHT JOIN Directions ON direction = direction_id ",//LEFT OUTER JOIN ON 
+                //" GROUP BY group_id,group_name,direction_name"
                 );
 
             ////////string cmd = "SELECT group_id AS 'ID', " +
@@ -177,17 +192,21 @@ namespace Academy
 
             tslGroupsCount.Text = $"Количество групп: {dgvGroups1.RowCount - 1}";
         }
-        void LoadDirections()
+
+        void LoadDictionaryToComboBox(Dictionary<string, int> tree , ComboBox cb)
         {
-            //DataTable dt_directions = Connector.LoadData
-            //    (
-            //    "direction_id,direction,direction_name", "Directions"
-            //    );
-            d_groups_directions = Connector.LoadPair("group_name", "group_id", "Groups");
+            cb.Items.AddRange(tree.Keys.ToArray());
+            cb.Items.Insert(0, "Все");
+            cb.SelectedIndex = 0;
+        }
+
+        void LoadDirections()
+        {            
+            d_directions = Connector.LoadPair("group_name", "group_id", "Groups");
             //cbGroupsDirection.DataSource = d_groups_directions;
             //cbGroupsDirection.D
             //d_groups_directions["Все"] = 0;
-            cbGroupsDirection.Items.AddRange(d_groups_directions.Keys.ToArray());
+            cbGroupsDirection.Items.AddRange(d_directions.Keys.ToArray());
             cbGroupsDirection.Items.Insert(0, "Все");
             cbGroupsDirection.SelectedIndex = 0;  
         }
@@ -216,7 +235,7 @@ namespace Academy
                 (
                     "group_id,group_name, direction_name",
                     "Groups,Directions",
-                    $"direction = direction_id AND direction = {d_groups_directions[cbGroupsDirection.SelectedItem.ToString()]}"
+                    $"direction = direction_id AND direction = {d_directions[cbGroupsDirection.SelectedItem.ToString()]}"
                 );
             tslGroupsCount.Text = $"Количество групп: {(dgvGroups1.RowCount == 0 ? 0 : dgvGroups1.RowCount - 1)}";
         }
