@@ -34,14 +34,14 @@ namespace Academy
             LoadGroup();
             d_groups = Connector.LoadPair("group_name", "group_id", "Groups");
             d_directions = Connector.LoadPair("direction_name", "direction_id", "Directions");
-           
+
             //LoadDirections();
             //LoadStudentsGroup();
             //LoadStudentsDirection();
             LoadTeachers();
+            LoadDictionaryToComboBox(d_groups, cbStudentsGroup);
             LoadDictionaryToComboBox(d_directions, cbStudentsDirection);
             LoadDictionaryToComboBox(d_directions, cbGroupsDirection);
-            LoadDictionaryToComboBox(d_groups, cbStudentsGroup);
         }
         void LoadStudents()
         {
@@ -76,9 +76,10 @@ namespace Academy
                    //-"CAST(FORMAT(GETDATE(), 'yyyy-MM-dd') AS date) AS 'Дата рождения', " +
                    //-"DATEDIFF(day,birth_date, CAST(FORMAT(GETDATE(), 'yyyy-MM-dd')AS birth_date) AS 'Дата рождения', " +
                    "DATEDIFF(day,birth_date,GetDATE())/365 AS 'Возраст', " +
-                   "group_name AS 'Группа'",
-                   "Groups,Students",
-                   "[group] = group_id"
+                   "group_name AS 'Группа'," +
+                   "direction_name AS 'Направление обучения'",
+                   "Groups,Students,Directions",
+                   "[group] = group_id AND direction = direction_id"
                );
             tslStudentsCount.Text = $"Количество студентов: {dgvStudents.RowCount - 1}";
         }
@@ -193,39 +194,40 @@ namespace Academy
             tslGroupsCount.Text = $"Количество групп: {dgvGroups1.RowCount - 1}";
         }
 
-        void LoadDictionaryToComboBox(Dictionary<string, int> tree , ComboBox cb)
+        void LoadDictionaryToComboBox(Dictionary<string, int> tree, ComboBox cb)
         {
+            cb.Items.Clear();
             cb.Items.AddRange(tree.Keys.ToArray());
-            cb.Items.Insert(0, "Все");
+            //cb.Items.Insert(0, "Все");
             cb.SelectedIndex = 0;
         }
 
-        void LoadDirections()
-        {            
-            d_directions = Connector.LoadPair("group_name", "group_id", "Groups");
-            //cbGroupsDirection.DataSource = d_groups_directions;
-            //cbGroupsDirection.D
-            //d_groups_directions["Все"] = 0;
-            cbGroupsDirection.Items.AddRange(d_directions.Keys.ToArray());
-            cbGroupsDirection.Items.Insert(0, "Все");
-            cbGroupsDirection.SelectedIndex = 0;  
-        }
-        void LoadStudentsGroup()
-        {
-            d_students_groups = Connector.LoadPair("direction_name", "direction_id", "Directions");
+        //void LoadDirections()
+        //{            
+        //    d_directions = Connector.LoadPair("group_name", "group_id", "Groups");
+        //    //cbGroupsDirection.DataSource = d_groups_directions;
+        //    //cbGroupsDirection.D
+        //    //d_groups_directions["Все"] = 0;
+        //    cbGroupsDirection.Items.AddRange(d_directions.Keys.ToArray());
+        //    cbGroupsDirection.Items.Insert(0, "Все");
+        //    cbGroupsDirection.SelectedIndex = 0;  
+        //}
+        //void LoadStudentsGroup()
+        //{
+        //    d_students_groups = Connector.LoadPair("direction_name", "direction_id", "Directions");
 
-            cbStudentsGroup.Items.AddRange(d_students_groups.Keys.ToArray());
-            cbStudentsGroup.Items.Insert(0, "Все");
-            cbStudentsGroup.SelectedIndex = 0;
-        }
-        void LoadStudentsDirection()
-        {
-            d_students_directions = Connector.LoadPair("direction_name", "direction_id", "Directions");
-                        
-            cbStudentsDirection.Items.AddRange(d_students_directions.Keys.ToArray());
-            cbStudentsDirection.Items.Insert(0, "Все");
-            cbStudentsDirection.SelectedIndex = 0;
-        }
+        //    cbStudentsGroup.Items.AddRange(d_students_groups.Keys.ToArray());
+        //    cbStudentsGroup.Items.Insert(0, "Все");
+        //    cbStudentsGroup.SelectedIndex = 0;
+        //}
+        //void LoadStudentsDirection()
+        //{
+        //    d_students_directions = Connector.LoadPair("direction_name", "direction_id", "Directions");
+
+        //    cbStudentsDirection.Items.AddRange(d_students_directions.Keys.ToArray());
+        //    cbStudentsDirection.Items.Insert(0, "Все");
+        //    cbStudentsDirection.SelectedIndex = 0;
+        //}
 
 
         private void cbGroupsDirection_SelectedIndexChanged(object sender, EventArgs e)
@@ -256,19 +258,52 @@ namespace Academy
 
         private void cbStudentsGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (cbStudentsDirection.SelectedIndex == 0) LoadStudents();
-            //else dgvStudents.DataSource = Connector.LoadData
-            //    (
-            //       "last_name AS 'Фамилия', first_name AS 'Имя', " +
-            //       "ISNULL(middle_name,N'') AS 'Отчество', " +
-            //       "CONVERT(NVARCHAR, birth_date, 104) AS 'Дата рождения', " +
-            //       "DATEDIFF(day,birth_date,GetDATE())/365 AS 'Возраст', " +
-            //       "group_name AS 'Группа'",
-            //       "Groups,Students",
-            //       $"[group] = group_id AND [group] = {d_students_groups[cbStudentsDirection.SelectedItem.ToString()]}"
+            //cbStudentsDirection.SelectedIndex = 0;
+            if (cbStudentsGroup.SelectedIndex == 0) LoadStudents();
+            else dgvStudents.DataSource = Connector.LoadData
+                (
+                   "last_name AS 'Фамилия', first_name AS 'Имя', " +
+                   "ISNULL(middle_name,N'') AS 'Отчество', " +
+                   "CONVERT(NVARCHAR, birth_date, 104) AS 'Дата рождения', " +
+                   "DATEDIFF(day,birth_date,GetDATE())/365 AS 'Возраст', " +
+                   "group_name AS 'Группа'," +
+                   "direction_name AS 'Направление обучения'",
+                   "Groups,Students,Directions",
+                   $"direction = direction_id AND [group]= group_id AND group_id = {d_groups[cbStudentsGroup.SelectedItem.ToString()]}"
+                );
+            tslStudentsCount.Text = $"Количество студентов: {(dgvStudents.RowCount > 0 ? 0 : dgvStudents.RowCount - 1)}";
+        }
 
-            //    );
-            tslStudentsCount.Text = $"Количество студентов: {dgvStudents.RowCount - 1}";
+        private void cbStudentsDirection_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //cbStudentsGroup.SelectedIndex = 0;
+            int filterID = cbStudentsDirection == null ? 0 : d_directions[cbStudentsDirection.SelectedItem.ToString()];
+            if (cbStudentsDirection.SelectedIndex == 0)
+            {
+                d_groups = Connector.LoadPair("group_name", "group_id", "Groups");
+                this.LoadDictionaryToComboBox(d_groups, cbStudentsGroup);
+                LoadStudents();
+            }
+            else
+            {
+                d_groups = Connector.LoadPair("group_name", "group_id", "Groups", $"direction = {filterID}");
+                this.LoadDictionaryToComboBox(d_groups, cbStudentsGroup);
+
+                dgvStudents.DataSource = Connector.LoadData
+                (
+                   "last_name AS 'Фамилия', first_name AS 'Имя', " +
+                   "ISNULL(middle_name,N'') AS 'Отчество', " +
+                   "CONVERT(NVARCHAR, birth_date, 104) AS 'Дата рождения', " +
+                   "DATEDIFF(day,birth_date,GetDATE())/365 AS 'Возраст', " +
+                   "group_name AS 'Группа'," +
+                   "direction_name AS 'Направление обучения'",
+                   "Groups,Students,Directions",
+                   $"direction = direction_id AND [group]= group_id AND direction_id = " +
+                   $"{d_directions[cbStudentsDirection.SelectedItem.ToString()]}"
+               );
+            }
+
+            tslStudentsCount.Text = $"Количество студентов: {(dgvStudents.RowCount > 0 ? 0 : dgvStudents.RowCount - 1)}";
         }
     }
 }

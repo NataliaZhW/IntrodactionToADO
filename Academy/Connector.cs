@@ -68,6 +68,7 @@ namespace Academy
             if (reader.HasRows)
             {
                 dictionary = new Dictionary<string, int>();
+                dictionary["Все"] = 0;
                 //for (int i = 0; i < reader.FieldCount; i++)
                 //    table.Columns.Add(reader.GetName(i));
                 while (reader.Read())
